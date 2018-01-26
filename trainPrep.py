@@ -1,5 +1,5 @@
 '''
-wordInfo = [index,word,POS,BIO]
+wordInfo = [index,word,POS,BIO,sentenceStart]
 
 '''
 
@@ -13,6 +13,9 @@ def getPOS(wordInfo):
     
 def isCap(wordInfo):
     return wordInfo[1][0].isupper()
+
+def sentenceStart(wordInfo):
+    return wordInfo[4]   
 
 if __name__ == '__main__':
     
@@ -31,7 +34,8 @@ if __name__ == '__main__':
     boolFuncList = [
               ('thisCap',isCap,0),
               ('nextCap',isCap,1),
-              ('prevCap',isCap,-1)
+              ('prevCap',isCap,-1),
+              ('sentenceStart',sentenceStart,0)
               ]
     
     
@@ -41,7 +45,6 @@ if __name__ == '__main__':
         while line != '':
             
             if line == '\n':
-                allWords[-1][-1] = 1 #sentenceEnd
                 sentenceStart = 1
                 line = train.readline()
                 continue
@@ -51,8 +54,6 @@ if __name__ == '__main__':
             if sentenceStart:
                 sentenceStart = 0
             
-            #only retroactively apply sentenceEnd
-            wordInfo.append(0)
             
             allWords.append(wordInfo)
             
