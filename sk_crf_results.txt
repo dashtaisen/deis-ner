@@ -1,0 +1,26 @@
+Converting gold files to sentence tuples...
+Building training and dev sets...
+Training model...
+Evaluating model...
+Predicting labels
+Displaying accuracy
+Displaying detailed metrics
+             precision    recall  f1-score   support
+
+      B-FAC      0.000     0.000     0.000        17
+      I-FAC      0.333     0.056     0.095        18
+      B-GPE      0.717     0.809     0.760        94
+      I-GPE      0.704     0.731     0.717        26
+      B-LOC      0.000     0.000     0.000         3
+      I-LOC      0.000     0.000     0.000         4
+      B-ORG      0.717     0.490     0.582       145
+      I-ORG      0.695     0.471     0.562       140
+      B-PER      0.809     0.805     0.807       231
+      I-PER      0.731     0.817     0.772        93
+      B-VEH      0.000     0.000     0.000         0
+      I-VEH      0.000     0.000     0.000         0
+      FAC>,      0.000     0.000     0.000         0
+       ORG>      0.000     0.000     0.000         0
+
+avg / total      0.710     0.642     0.665       771
+
