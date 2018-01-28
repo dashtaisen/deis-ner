@@ -6,6 +6,7 @@ from itertools import chain
 import nltk
 import sklearn
 import scipy.stats
+import re
 from sklearn.metrics import make_scorer
 from sklearn.cross_validation import cross_val_score
 from sklearn.grid_search import RandomizedSearchCV
@@ -74,6 +75,11 @@ def word2features(sent, i):
         'word.isupper()': word.isupper(),
         'word.istitle()': word.istitle(),
         'word.isdigit()': word.isdigit(),
+        #'capPeriod': word.istitle() and word[-1] == '.',
+        #'oneCap': len(word) == 1 and word.isupper(),
+        #'allCapPeriod': word[:-1].isupper() and word[-1] == '.',
+        'pattern': getPattern(word),
+        'patternSumm': getPattern(word,True),
         'postag': postag,
         'postag[:2]': postag[:2],
         'wordnet-neg':len(wn.synsets(word)) == 0
@@ -187,6 +193,28 @@ def evaluate_model(model, X_dev, y_dev):
     print(metrics.flat_classification_report(
         y_dev, y_pred, labels=sorted_labels, digits=3
     ))
+    
+def getPattern(word,summarized=False):
+    """Return the word with all capitals as A, all lowercase as a, all numbers as 0, and all punctuation as -
+    Inputs:
+        word: The word to convert to a pattern
+        summarized: whether to collapse sequences of the same type of character
+    Returns:
+        A pattern string modeled on the input word
+    """
+    
+    if summarized:
+        pattern = re.sub(r'[A-Z]+','A',word)
+        pattern = re.sub(r'[a-z]+','a',pattern)
+        pattern = re.sub(r'[0-9]+','0',pattern)
+        pattern = re.sub(r'[^A-Za-z0-9]+','-',pattern)
+    else:
+        pattern = re.sub(r'[A-Z]','A',word)
+        pattern = re.sub(r'[a-z]','a',pattern)
+        pattern = re.sub(r'[0-9]','0',pattern)
+        pattern = re.sub(r'[^A-Za-z0-9]','-',pattern)
+    
+    return pattern
 
 if __name__ == "__main__":
     print("Converting gold files to sentence tuples...")
