@@ -19,8 +19,8 @@ from sklearn_crfsuite import metrics
 
 
 #Location of training, dev, and test sets
-TRAIN_SOURCE = '../project1-train-dev/train.gold'
-DEV_SOURCE = '../project1-train-dev/dev.gold'
+TRAIN_SOURCE = '../train.gold'
+DEV_SOURCE = '../dev.gold'
 
 def get_tuples(filename):
     """Turn a gold file into lists of tuples for CRF processing
@@ -69,12 +69,14 @@ def word2features(sent, i):
         'word.lower()': word.lower(),
         'word[-3:]': word[-3:],
         'word[-2:]': word[-2:],
+        'word[-4:]': word[-4:],
+        'word[-5:]': word[-5:],
         'word.isupper()': word.isupper(),
         'word.istitle()': word.istitle(),
         'word.isdigit()': word.isdigit(),
         'postag': postag,
         'postag[:2]': postag[:2],
-        'wordnet':len(wn.synsets(word)) > 0
+        'wordnet-neg':len(wn.synsets(word)) == 0
     }
     if i > 0:
         word1 = sent[i-1][0]
