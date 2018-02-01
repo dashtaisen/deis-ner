@@ -95,6 +95,7 @@ def word2features(sent, i):
             #'-1:pattern': getPattern(word1),
             '-1:patternSumm': getPattern(word1,True),
             '-1:postag[:2]': postag1[:2],
+            '-1:wordnet-neg':len(wn.synsets(word1)) == 0
         })
     else:
         features['BOS'] = True
@@ -110,6 +111,7 @@ def word2features(sent, i):
             #'+1:pattern': getPattern(word1),
             '+1:patternSumm': getPattern(word1,True),
             '+1:postag[:2]': postag1[:2],
+            '+1:wordnet-neg':len(wn.synsets(word1)) == 0
         })
     else:
         features['EOS'] = True
