@@ -1,4 +1,5 @@
 """CRF training with scikit-learn API
+current highest fscore: .718
 """
 
 from itertools import chain
@@ -22,6 +23,9 @@ from sklearn_crfsuite import metrics
 #Location of training, dev, and test sets
 TRAIN_SOURCE = '../train.gold'
 DEV_SOURCE = '../dev.gold'
+TEST_SOURCE = '../dev.gold'
+EVALUATE_OUTPUT = False
+OUTPUT_FILE = 'sk-train.model'
 
 def get_tuples(filename):
     """Turn a gold file into lists of tuples for CRF processing
@@ -78,12 +82,27 @@ def word2features(sent, i):
         #'capPeriod': word.istitle() and word[-1] == '.',
         #'oneCap': len(word) == 1 and word.isupper(),
         #'allCapPeriod': word[:-1].isupper() and word[-1] == '.',
+        #'hyphen': '-' in word, #from http://www.oegai.at/konvens2012/proceedings/17_tkachenko12o/17_tkachenko12o.pdf
+        #'word[:2]': word[:2],
+        #'word[:3]': word[:3],
+        #'word[:4]': word[:4],
+        #'word[:5]': word[:5],
         'pattern': getPattern(word),
         'patternSumm': getPattern(word,True),
         'postag': postag,
         'postag[:2]': postag[:2],
         'wordnet-neg':len(wn.synsets(word)) == 0
     }
+    
+    #from http://www.oegai.at/konvens2012/proceedings/17_tkachenko12o/17_tkachenko12o.pdf
+    '''
+    if '-' in word: 
+        subtokenI = 0
+        for subtoken in word.split('-'):
+            features['subtoken'+str(subtokenI)] = subtoken
+            subtokenI += 1
+    '''
+    
     if i > 0:
         word1 = sent[i-1][0]
         postag1 = sent[i-1][1]
@@ -93,6 +112,7 @@ def word2features(sent, i):
             '-1:word.isupper()': word1.isupper(),
             '-1:postag': postag1,
             #'-1:pattern': getPattern(word1),
+            '-1:ampersand': word1 == '&',
             '-1:patternSumm': getPattern(word1,True),
             '-1:postag[:2]': postag1[:2],
             '-1:wordnet-neg':len(wn.synsets(word1)) == 0
@@ -109,6 +129,7 @@ def word2features(sent, i):
             '+1:word.isupper()': word1.isupper(),
             '+1:postag': postag1,
             #'+1:pattern': getPattern(word1),
+            '+1:ampersand': word1 == '&',
             '+1:patternSumm': getPattern(word1,True),
             '+1:postag[:2]': postag1[:2],
             '+1:wordnet-neg':len(wn.synsets(word1)) == 0
@@ -164,10 +185,10 @@ def train(X_train, y_train):
     model.fit(X_train, y_train)
     return model
 
-def evaluate_model(model, X_dev, y_dev):
+def evaluate_model(crf, X_dev, y_dev):
     """Evaluate the model
     Inputs:
-        model: trained CRF model
+        crf: trained CRF model
         X_dev: list of feature dicts for dev set
         y_dev: list of labels for dev set
     Returns:
@@ -221,6 +242,24 @@ def getPattern(word,summarized=False):
         pattern = re.sub(r'[^A-Za-z0-9]','-',pattern)
     
     return pattern
+    
+def output_model(crf,x_dev,y_dev):
+    with open(OUTPUT_FILE,'w') as f:
+        #Get the labels we're evaluating
+        labels = list(crf.classes_)
+
+        #Most labels are 'O', so we ignore,
+        #otherwise our scores will seem higher than they actually are.
+        labels.remove('O')
+        
+        y_pred = crf.predict(x_dev)
+        
+        for sentence in y_pred:
+            for label in sentence:
+                f.write(label)
+                f.write('\n')
+            f.write('\n')
+                
 
 if __name__ == "__main__":
     print("Converting gold files to sentence tuples...")
@@ -240,5 +279,9 @@ if __name__ == "__main__":
     print("Training model...")
     crf = train(X_train, y_train)
 
-    print("Evaluating model...")
-    evaluate_model(crf, X_dev, y_dev)
+    if EVALUATE_OUTPUT:
+        print("Evaluating model...")
+        evaluate_model(crf, X_dev[:1], y_dev[:1])
+    else:
+        output_model(crf,X_dev,y_dev)
+        
