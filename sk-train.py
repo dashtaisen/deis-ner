@@ -1,5 +1,4 @@
 """CRF training with scikit-learn API
-current highest fscore: .718
 """
 
 from itertools import chain
@@ -243,7 +242,13 @@ def getPattern(word,summarized=False):
     
     return pattern
     
-def output_model(crf,x_dev,y_dev):
+def output_model(crf,x_dev):
+    """Print predicted tags to file, one line per tag with a blank line in between sentences
+    Inputs:
+        crf: Trained CRF model
+        x_dev: List of lists of feature dictionaries of test set
+    """
+    
     with open(OUTPUT_FILE,'w') as f:
         #Get the labels we're evaluating
         labels = list(crf.classes_)
