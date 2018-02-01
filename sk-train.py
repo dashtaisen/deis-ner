@@ -92,6 +92,8 @@ def word2features(sent, i):
             '-1:word.istitle()': word1.istitle(),
             '-1:word.isupper()': word1.isupper(),
             '-1:postag': postag1,
+            #'-1:pattern': getPattern(word1),
+            '-1:patternSumm': getPattern(word1,True),
             '-1:postag[:2]': postag1[:2],
         })
     else:
@@ -105,6 +107,8 @@ def word2features(sent, i):
             '+1:word.istitle()': word1.istitle(),
             '+1:word.isupper()': word1.isupper(),
             '+1:postag': postag1,
+            #'+1:pattern': getPattern(word1),
+            '+1:patternSumm': getPattern(word1,True),
             '+1:postag[:2]': postag1[:2],
         })
     else:
