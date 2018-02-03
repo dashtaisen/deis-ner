@@ -20,11 +20,11 @@ from sklearn_crfsuite import metrics
 
 
 #Location of training, dev, and test sets
-TRAIN_SOURCE = '../train.gold'
-DEV_SOURCE = '../dev.gold'
-TEST_SOURCE = '../dev.gold'
+TRAIN_SOURCE = './train.gold'
+DEV_SOURCE = './dev.gold'
+TEST_SOURCE = './test.gold'
 EVALUATE_OUTPUT = False
-OUTPUT_FILE = 'sk-train.model'
+OUTPUT_FILE = 'deis-ner/sk-train.model'
 
 def get_tuples(filename):
     """Turn a gold file into lists of tuples for CRF processing
@@ -55,6 +55,10 @@ def get_tuples(filename):
                         current_sent = [tuple(line_tokens[1:])]
                     else:
                         current_sent.append(tuple(line_tokens[1:]))
+                        
+    #grab the last sentence
+    if len(current_sent) > 0:
+        sents.append(current_sent)
     return sents
 
 def word2features(sent, i):
@@ -269,7 +273,7 @@ def output_model(crf,x_dev):
 if __name__ == "__main__":
     print("Converting gold files to sentence tuples...")
     train_sents = get_tuples(TRAIN_SOURCE)
-    dev_sents = get_tuples(DEV_SOURCE)
+    dev_sents = get_tuples(TEST_SOURCE)
 
     #print(train_sents[2]) #for debugging
     #print(sent2features(train_sents[0])[0]) #for debugging
