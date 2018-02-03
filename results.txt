@@ -1,0 +1,13 @@
+Results:
+	CRFSuite defaults: .739, .690, .714
+	Wordnet 0: .749, .688, .717
+	Wordnet all: .747, .685, .715
+	Word[-4/-5:]: .758, .695, .725
+	pattern 0: .749, .690, .718
+	pattern/Summpattern 0: .748, .698, .722
+	pattern 0, summpattern all: .762, .712, .736
+	summpattern all: .778, .723, .750
+	before/after &: .768, .722, .744
+	word prefix (4,5): .774, .733, .753
+	subtokens (by hyphen): .779, .736, .757 (!!!)
+	 
