@@ -24,7 +24,7 @@ TRAIN_SOURCE = '../train.gold'
 DEV_SOURCE = '../dev.gold'
 TEST_SOURCE = '../test.gold'
 EVALUATE_OUTPUT = False
-OUTPUT_FILE = 'sk-train.model'
+OUTPUT_FILE = 'output_sk-train.model'
 
 def get_tuples(filename):
     """Turn a gold file into lists of tuples for CRF processing
@@ -98,13 +98,13 @@ def word2features(sent, i):
     }
     
     #from http://www.oegai.at/konvens2012/proceedings/17_tkachenko12o/17_tkachenko12o.pdf
-    '''
+    
     if '-' in word: 
         subtokenI = 0
         for subtoken in word.split('-'):
             features['subtoken'+str(subtokenI)] = subtoken
             subtokenI += 1
-    '''
+    
     
     if i > 0:
         word1 = sent[i-1][0]
