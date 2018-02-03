@@ -286,7 +286,7 @@ if __name__ == "__main__":
 
     if EVALUATE_OUTPUT:
         print("Evaluating model...")
-        evaluate_model(crf, X_dev[:1], y_dev[:1])
+        evaluate_model(crf, X_dev, y_dev)
     else:
-        output_model(crf,X_dev,y_dev)
+        output_model(crf,X_dev)
         
