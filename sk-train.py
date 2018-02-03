@@ -88,8 +88,8 @@ def word2features(sent, i):
         #'hyphen': '-' in word, #from http://www.oegai.at/konvens2012/proceedings/17_tkachenko12o/17_tkachenko12o.pdf
         #'word[:2]': word[:2],
         #'word[:3]': word[:3],
-        #'word[:4]': word[:4],
-        #'word[:5]': word[:5],
+        'word[:4]': word[:4],
+        'word[:5]': word[:5],
         #'pattern': getPattern(word),
         'patternSumm': getPattern(word,True),
         'postag': postag,
