@@ -20,11 +20,11 @@ from sklearn_crfsuite import metrics
 
 
 #Location of training, dev, and test sets
-TRAIN_SOURCE = './train.gold'
-DEV_SOURCE = './dev.gold'
-TEST_SOURCE = './test.gold'
+TRAIN_SOURCE = '../train.gold'
+DEV_SOURCE = '../dev.gold'
+TEST_SOURCE = '../test.gold'
 EVALUATE_OUTPUT = False
-OUTPUT_FILE = 'deis-ner/sk-train.model'
+OUTPUT_FILE = 'sk-train.model'
 
 def get_tuples(filename):
     """Turn a gold file into lists of tuples for CRF processing
@@ -90,7 +90,7 @@ def word2features(sent, i):
         #'word[:3]': word[:3],
         #'word[:4]': word[:4],
         #'word[:5]': word[:5],
-        'pattern': getPattern(word),
+        #'pattern': getPattern(word),
         'patternSumm': getPattern(word,True),
         'postag': postag,
         'postag[:2]': postag[:2],
@@ -115,10 +115,10 @@ def word2features(sent, i):
             '-1:word.isupper()': word1.isupper(),
             '-1:postag': postag1,
             #'-1:pattern': getPattern(word1),
-            '-1:ampersand': word1 == '&',
+            #'-1:ampersand': word1 == '&',
             '-1:patternSumm': getPattern(word1,True),
             '-1:postag[:2]': postag1[:2],
-            '-1:wordnet-neg':len(wn.synsets(word1)) == 0
+            #'-1:wordnet-neg':len(wn.synsets(word1)) == 0
         })
     else:
         features['BOS'] = True
@@ -132,10 +132,10 @@ def word2features(sent, i):
             '+1:word.isupper()': word1.isupper(),
             '+1:postag': postag1,
             #'+1:pattern': getPattern(word1),
-            '+1:ampersand': word1 == '&',
+            #'+1:ampersand': word1 == '&',
             '+1:patternSumm': getPattern(word1,True),
             '+1:postag[:2]': postag1[:2],
-            '+1:wordnet-neg':len(wn.synsets(word1)) == 0
+            #'+1:wordnet-neg':len(wn.synsets(word1)) == 0
         })
     else:
         features['EOS'] = True
